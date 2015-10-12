@@ -23,18 +23,15 @@ class Layer:
         self.W = W
         self.b = b
         self.activation = activation
-
+        self.params = [self.W, self.b]
 
     def run_input(self,_input):
-        print "Size of input: ", _input.shape
         lin_output = np.dot(self.W, _input) + self.b
         print self.activation
-        if self.activation != None:
-            print "Running activation"
-            return self.activation(lin_output)
-        else:
-            print "Skipping activation"
+        if self.activation is None:
             return lin_output
+        else:
+            return self.activation(lin_output)
 
         
 def __main__():
