@@ -53,8 +53,13 @@ def test_WFModel():
     f.close()
     
     dataset = 'mnist.pkl.gz'
-    datasets = load_data(dataset)
-    print datasets
+    classes = [1, 8]
+    datasets = load_data(dataset, classes)
+    train_set_x, train_set_y = datasets[0]
+    valid_set_x, valid_set_y = datasets[1]
+    test_set_x, test_set_y = datasets[2]
+    print train_set_y[0]
+    print type(train_set_y[0])
 
 if __name__ == '__main__':
     test_WFModel()

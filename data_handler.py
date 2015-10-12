@@ -2,16 +2,15 @@ import os
 import gzip
 import cPickle
 
-def load_data(dataset):
+def load_data(dataset, classes = None):
     ''' Loads the dataset
 
     :type dataset: string
+    :type classes (added): list of strings
     :param dataset: the path to the dataset (here MNIST)
+    :param classes: if exist, specify which classes from the dataset to include
     '''
 
-    #############
-    # LOAD DATA #
-    #############
 
     # Download the MNIST dataset if it is not present
     data_dir, data_file = os.path.split(dataset)
