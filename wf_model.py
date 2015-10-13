@@ -18,10 +18,10 @@ class WFModel(object):
         #note: size of input layer is size of MNIST image
         layers_size = [28 * 28, 10, 10, 1]
         self.size = layers_size
-        rectifier_func = lambda x: max(0,x)
+        rectifier_func = np.vectorize(lambda x: max(0,x))
         #expit function is also known as the logistic function.
         #definition is to make this clear in the program
-        sigmoid = lambda x: expit(x)
+        sigmoid = np.vectorize(lambda x: expit(x))
         rng = np.random.RandomState(1234)
         
         H1 = Layer(rng, layers_size[0], layers_size[1], None, None, rectifier_func)
@@ -31,9 +31,10 @@ class WFModel(object):
         self.layers = [H1, H2, Out]
 
     def run_input(self, _input):
+        H1, H2, Out = self.layers
         H1_output = H1.run_input(_input)
         H2_output = H2.run_input(H1_output)
-        return Out.run_input(H2)
+        return Out.run_input(H2_output)
 
     def get_params(self):
         H1, H2, Out = self.layers
@@ -41,6 +42,7 @@ class WFModel(object):
                 'size': self.size,
                 'weights': [H1.W.tolist(), H2.W.tolist(), Out.W.tolist()],
                 'biases': [H1.b.tolist(), H2.b.tolist(), Out.b.tolist()]}
+
 
 def test_WFModel():
     rectifier_func = lambda x: max(0,x)
@@ -52,8 +54,10 @@ def test_WFModel():
     json.dump(params, f)
     f.close()
 
-    datasets = load_data('mnist.pkl.gz', [1,7])
-    print datasets
+    datasets = load_data('mnist.pkl.gz', [1,7]) 
+    train_x, train_y = datasets[0]
+
+    print wf.run_input(train_x[50])
 
 
 if __name__ == '__main__':

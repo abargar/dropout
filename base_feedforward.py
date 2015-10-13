@@ -26,8 +26,7 @@ class Layer:
         self.params = [self.W, self.b]
 
     def run_input(self,_input):
-        lin_output = np.dot(self.W, _input) + self.b
-        print self.activation
+        lin_output = np.dot(_input, self.W) + self.b
         if self.activation is None:
             return lin_output
         else:
