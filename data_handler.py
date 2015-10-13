@@ -1,6 +1,7 @@
 import os
 import gzip
 import cPickle
+import numpy as np
 
 def load_data(dataset, classes = None):
     ''' Loads the dataset
@@ -39,10 +40,45 @@ def load_data(dataset, classes = None):
     train_set, valid_set, test_set = cPickle.load(f)
     f.close()
     
-    return [train_set, valid_set, test_set]
-    #train_set, valid_set, test_set format: tuple(input, target)
-    #input is an numpy.ndarray of 2 dimensions (a matrix)
-    #witch row's correspond to an example. target is a
-    #numpy.ndarray of 1 dimensions (vector)) that have the same length as
-    #the number of rows in the input. It should give the target
-    #target to the example with the same index in the input.
+    return filter_by_classes([train_set, valid_set, test_set], classes)
+
+
+def filter_by_classes(datasets, classes):
+    train_x, train_y = datasets[0]
+    valid_x, valid_y = datasets[1]
+    test_x, test_y = datasets[2]
+    
+    indices = np.in1d(train_y.ravel(), classes).reshape(train_y.shape)
+    class_inds = np.where(indices)
+    filtered_train_set = [train_x[class_inds], train_y[class_inds]]
+    
+    indices = np.in1d(valid_y.ravel(), classes).reshape(valid_y.shape)
+    class_inds = np.where(indices)
+    filtered_valid_set = [valid_x[class_inds], valid_y[class_inds]]    
+
+    indices = np.in1d(test_y.ravel(), classes).reshape(test_y.shape)
+    class_inds = np.where(indices)
+    filtered_test_set = [test_x[class_inds], test_y[class_inds]]
+
+    return [filtered_train_set, filtered_valid_set, filtered_test_set]
+
+def test_data_handler():
+    datasets = load_data('mnist.pkl.gz', [1,8])
+
+    train_set = datasets[0]
+    train_x = train_set[0]
+    train_y = train_set[1]
+    import matplotlib.pyplot as plt
+    
+    print train_y[25]
+    test_img = train_x[25].reshape(28, 28)
+    plt.gray()
+    plt.imshow(test_img)
+    plt.axis('off')
+    plt.show()
+
+    
+    
+    
+if __name__ == '__main__':
+    test_data_handler()

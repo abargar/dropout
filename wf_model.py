@@ -51,15 +51,10 @@ def test_WFModel():
     f = open('testnet.json', 'w')
     json.dump(params, f)
     f.close()
-    
-    dataset = 'mnist.pkl.gz'
-    classes = [1, 8]
-    datasets = load_data(dataset, classes)
-    train_set_x, train_set_y = datasets[0]
-    valid_set_x, valid_set_y = datasets[1]
-    test_set_x, test_set_y = datasets[2]
-    print train_set_y[0]
-    print type(train_set_y[0])
+
+    datasets = load_data('mnist.pkl.gz', [1,7])
+    print datasets
+
 
 if __name__ == '__main__':
     test_WFModel()
