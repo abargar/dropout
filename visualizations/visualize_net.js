@@ -1,4 +1,4 @@
-d3.json('testnet.json', function(data){
+d3.json('broken_wfmodel_backprop_300_net.json', function(data){
 var model = data.model;
 var layer_sizes = data.size;
 var weights = data.weights;
@@ -56,6 +56,8 @@ var linkData = weights.map(function(mat,k){
 	});
 });
 
+console.log(linkData);
+
 linkData = [].concat.apply([], linkData);
 linkData = [].concat.apply([], linkData);
 
@@ -69,7 +71,11 @@ links.style("stroke", "black")
      .attr("y1", function(d){return yScales[d[0]](d[1])+2;})
      .attr("x2", function(d){return xScale(d[0]+1);})
      .attr("y2", function(d){return yScales[d[0]+1](d[2])+2;})
-     .style("stroke-opacity", function(d){return d[3];});
+     .style("stroke-opacity", function(d){
+        if( d[0] === 2){
+        	console.log(d);
+        }
+     	return abs(d[3]);});
 
 console.log('Showing model: ', model);
 console.log('It lives!');
